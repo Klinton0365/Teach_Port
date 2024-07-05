@@ -1,4 +1,10 @@
-<?php include 'libs/load.php'; ?>
+<?php include 'libs/load.php';
+
+if (isset($_SESSION['user_email'])) {?>
+    <script>
+    window.location.href = "home.php";
+</script>
+<?php } ?>
 <!DOCTYPE html>
 <html lang="en">
 

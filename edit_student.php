@@ -20,9 +20,11 @@
         $stmt->execute();
         $result = $stmt->get_result();
         $student = $result->fetch_assoc();
-    } else {
-        header("Location: home.php");
-    }
+    } else { ?>
+        <script>
+            window.location.href = "home.php";
+        </script>
+    <?php }
     ?>
     <div class="container">
         <h2>Edit Student</h2>

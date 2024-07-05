@@ -20,21 +20,21 @@ if (isset($_GET['logout'])) {
             echo "<h3> Previous Session not removing from db</h3>";
         }
         Session::destroy();
-		Session::unset_all();
-        header("Location: /");
-        die();
+        Session::unset_all(); ?>
+        <script>
+            window.location.href = "index.php";
+        </script>
+    <?php die();
     }
 }
 
-if(!isset($_COOKIE['fingerprint'])){
-    header('Location: index.php');
-}
+if (!isset($_COOKIE['fingerprint'])) { ?>
+    <script>
+        window.location.href = "index.php";
+    </script>
+    <?php }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // include_once 'libs/core/Database.class.php';
-    // include_once 'libs/core/Session.class.php';
-    // include_once 'libs/core/User.class.php';
-    // include_once 'libs/core/UserSession.class.php';
 
     if ($_POST['action'] == 'signin') {
         if (isset($_POST['email']) && isset($_POST['password'])) {
@@ -44,16 +44,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $result = UserSession::authenticate($email, $pass);
             $login = true;
 
-            $adminLoggedIn = isset($_POST['email']) && $_POST['email'] === 'klinton.developer365@gmail.com';
+            //$adminLoggedIn = isset($_POST['email']) && $_POST['email'] === 'klinton.developer365@gmail.com';
 
             if ($login) {
                 // if ($adminLoggedIn) {
                 //     header("Location: home.php");
                 //     exit();
                 //} else
-                if ($result) {
-                    header("Location: home.php");
-                    exit();
+                if ($result) { ?>
+                    <script>
+                        window.location.href = "home.php";
+                    </script>
+                <?php // header("Location: home.php");
                 } else {
                     $notification = 'Invalid Credentials!';
                 }
@@ -67,16 +69,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             try {
                 User::signup($user, $email, $pass);
-                $signup = true;
-                header("Location: login.php");
-                exit();
+                $signup = true; ?>
+                <script>
+                    window.location.href = "login.php";
+                </script>
+<?php exit();
             } catch (mysqli_sql_exception $e) {
                 $error = $e->getMessage();
                 $signup = false;
                 echo '<p style="color:red;">Error: ' . $error . '</p>';
             }
-            
-                
         }
     }
 }
@@ -95,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="container" id="container">
         <div class="form-container sign-up-container">
-            <form action="login.php" method="POST">
+            <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
                 <h1>Create Account</h1>
                 <div class="social-container">
                     <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -112,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
         </div>
         <div class="form-container sign-in-container">
-            <form action="login.php" method="POST">
+            <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
                 <h1>Sign in</h1>
                 <div class="social-container">
                     <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
