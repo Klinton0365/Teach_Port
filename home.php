@@ -60,8 +60,14 @@
 </head>
 
 <body>
-    <h2>Teacher Portal</h2>
-    <div class="alert alert-danger" role="alert"><strong>Info!</strong> Add row and Delete row are working. Edit row displays modal with row cells information.</div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Teacher Portal</h2>
+        <a href="login.php?logout">
+            <img src="assets/logout.png" alt="logout" style="height: 30px; width: 30px; margin-right: 50px;">
+        </a>
+    </div>
+
+    <div id="alertMessage" class="alert alert-danger" role="alert" style="display: none;"><strong>Info!</strong><span id="messageContent"></span></div>
     <br>
     <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
@@ -103,7 +109,7 @@
 
     <!-- Add Student Modal -->
     <div id="addStudentModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 400px;">
             <span class="close" onclick="closeAddStudentModal()">&times;</span>
             <div class="wrapper">
                 <div class="inner">
@@ -125,7 +131,7 @@
                             <input type="number" name="marks" class="form-control" placeholder="Marks" required>
                         </div>
                         <br>
-                        <button type="submit">
+                        <button type="submit" class="btn btn-success" style="float: right;">
                             <span>Add</span>
                         </button>
                     </form>
@@ -137,7 +143,7 @@
 
     <!-- Delete Student Modal -->
     <div id="deleteStudentModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 400px;">
             <span class="close" onclick="closeDeleteStudentModal()">&times;</span>
             <div class="wrapper">
                 <div class="inner">
@@ -154,6 +160,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             fetchStudents();
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            if (message) {
+                showMessage(message);
+                // Remove the message parameter from the URL without reloading the page
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
         });
 
         function showAddStudentModal() {
@@ -165,7 +178,7 @@
         }
 
         function showDeleteStudentModal(id, name, subject, marks) {
-            document.getElementById('deleteStudentMessage').innerText = `You want delete the ${name} with ${subject} and ${marks}`;
+            document.getElementById('deleteStudentMessage').innerText = `You want to delete ${name} with ${subject} and ${marks}`;
             document.getElementById('confirmDeleteButton').setAttribute('data-id', id);
             document.getElementById('deleteStudentModal').style.display = 'block';
         }
@@ -184,8 +197,7 @@
                 .then(data => {
                     if (data.status === 'success') {
                         closeAddStudentModal();
-                        fetchStudents();
-                        alert('Successfully added student');
+                        window.location.href = 'home.php?message=Successfully added student';
                     } else {
                         alert('Error adding student: ' + data.message);
                     }
@@ -239,12 +251,18 @@
                 .then(data => {
                     if (data.status === 'success') {
                         closeDeleteStudentModal();
-                        fetchStudents();
-                        alert('Successfully deleted the student');
+                        window.location.href = 'home.php?message=Successfully deleted the student';
                     } else {
                         alert('Error deleting student: ' + data.message);
                     }
                 });
+        }
+
+        function showMessage(message) {
+            const alertDiv = document.getElementById('alertMessage');
+            const messageContent = document.getElementById('messageContent');
+            messageContent.innerText = message;
+            alertDiv.style.display = 'block';
         }
     </script>
 </body>

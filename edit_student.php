@@ -56,8 +56,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        alert('Successfully updated the student record');
-                        window.location.href = 'home.php';
+                        window.location.href = 'home.php?message=Successfully updated the student record';
                     } else {
                         alert('Error updating student: ' + data.message);
                     }

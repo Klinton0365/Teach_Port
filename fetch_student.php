@@ -1,5 +1,5 @@
 <?php
-include_once 'libs/core/Database.class.php';
+include_once 'libs/load.php';
 
 $conn = Database::getConnection();
 $sql = "SELECT * FROM student";

@@ -1,5 +1,35 @@
-<?php include 'libs/load.php'; ?>
 <?php
+include 'libs/load.php';
+
+$conn = Database::getConnection();
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+$notification = '';
+
+if (isset($_GET['logout'])) {
+    if (Session::isset("session_token")) {
+        $Session = new UserSession(Session::get("session_token"));
+        if ($Session->removeSession()) {
+            error_log("previous Session is removed from db");
+            echo "<h3> previous Session is removed from db</h3>";
+        } else {
+            error_log("Previous Session is not removing from db");
+            echo "<h3> Previous Session not removing from db</h3>";
+        }
+        Session::destroy();
+		Session::unset_all();
+        header("Location: /");
+        die();
+    }
+}
+
+if(!isset($_COOKIE['fingerprint'])){
+    header('Location: index.php');
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // include_once 'libs/core/Database.class.php';
     // include_once 'libs/core/Session.class.php';
@@ -17,15 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $adminLoggedIn = isset($_POST['email']) && $_POST['email'] === 'klinton.developer365@gmail.com';
 
             if ($login) {
-                if ($adminLoggedIn) {
-                    header("Location: home.php");
-                    exit();
-                } elseif ($result) {
+                // if ($adminLoggedIn) {
+                //     header("Location: home.php");
+                //     exit();
+                //} else
+                if ($result) {
                     header("Location: home.php");
                     exit();
                 } else {
                     $notification = 'Invalid Credentials!';
-                    //echo '<p style="color:red;">' . $notification . '</p>';
                 }
             }
         }
@@ -45,6 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $signup = false;
                 echo '<p style="color:red;">Error: ' . $error . '</p>';
             }
+            
+                
         }
     }
 }
@@ -70,7 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
-                <span>or use your email for registration</span>
+                <p style="color:red;">Error: <?php echo htmlspecialchars($error); ?></p>
+                <!-- <span>or use your email for registration</span> -->
                 <input type="text" name="username" placeholder="Name" required />
                 <input type="email" name="email" placeholder="Email" required />
                 <input type="password" name="password" placeholder="Password" required />
@@ -86,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
-                <span>or use your account</span>
+                <!-- <span>or use your account</span> -->
                 <?php echo '<p style="color:red;">' . $notification . '</p>'; ?>
                 <input type="email" name="email" placeholder="Email" required />
                 <input type="password" name="password" placeholder="Password" required />

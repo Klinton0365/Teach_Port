@@ -1,5 +1,5 @@
 <?php
-include_once 'libs/core/Database.class.php';
+include_once 'libs/load.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 $id = $data['id'];

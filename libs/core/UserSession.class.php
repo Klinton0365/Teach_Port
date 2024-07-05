@@ -17,7 +17,7 @@ class UserSession
         $stmt->bind_param('s', $token);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         if ($result->num_rows) {
             $row = $result->fetch_assoc();
             $this->data = $row;
@@ -34,21 +34,21 @@ class UserSession
         date_default_timezone_set('Asia/Kolkata');
         $currentDateTime = date('Y-m-d H:i:s');
 
-        if ($email === 'anand@courseconnect.co.in') {
-            Session::set('admin_email', $email);
-        } else {
-            Session::set('user_email', $email);
-        }
+        // if ($email === 'klinton.developer365@gmail.com') {
+        //     Session::set('admin_email', $email);
+        // } else {
+        Session::set('user_email', $email);
+        // }
 
-        if (isset($_SESSION['user_email']) || isset($_SESSION['admin_email'])) {
-            $userEmail = $email; // Use the email directly instead of checking session variables
-        }
+        //if (isset($_SESSION['user_email']) || isset($_SESSION['admin_email'])) {
+        $userEmail = $email; // Use the email directly instead of checking session variables
+        //}
 
         if ($fingerprint == null) {
             $fingerprint = $_COOKIE['fingerprint'] ?? null;
         }
 
-        if ($emailVerify && $fingerprint) { 
+        if ($emailVerify && $fingerprint) {
             $user = new User($emailVerify);
             $conn = Database::getConnection();
             $ip = $_SERVER['REMOTE_ADDR'];
@@ -143,27 +143,26 @@ class UserSession
         return $this->data["fingerprint"] ?? false;
     }
 
-    public function removeSession()
-    {
-        // Get user email from session
-        $userEmail = Session::get('admin_email') ?? Session::get('user_email');
-
-        if ($userEmail) {
-            $stmt = $this->conn->prepare("DELETE FROM `session` WHERE `user_email` = ?");
-            $stmt->bind_param('s', $userEmail);
-            return $stmt->execute();
-        }
-        return false;
-    }
-
     // public function removeSession()
     // {
-    //     if (isset($this->data['id'])) {
-    //         $stmt = $this->conn->prepare("DELETE FROM `session` WHERE `id` = ?");
-    //         $stmt->bind_param('i', $this->data['id']);
+    //     // Get user email from session
+    //     $userEmail = Session::get('user_email');
+
+    //     if ($userEmail) {
+    //         $stmt = $this->conn->prepare("DELETE FROM `session` WHERE `user_email` = ?");
+    //         $stmt->bind_param('s', $userEmail);
     //         return $stmt->execute();
     //     }
     //     return false;
     // }
+
+    public function removeSession()
+    {
+        if (isset($this->data['id'])) {
+            $stmt = $this->conn->prepare("DELETE FROM `session` WHERE `id` = ?");
+            $stmt->bind_param('i', $this->data['id']);
+            return $stmt->execute();
+        }
+        return false;
+    }
 }
-?>
