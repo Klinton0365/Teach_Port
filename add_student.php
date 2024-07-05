@@ -1,5 +1,5 @@
 <?php
-include_once 'libs/core/Database.class.php';
+include_once 'libs/load.php';
 
 $name = $_POST['name'];
 $subject = $_POST['subject'];

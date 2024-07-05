@@ -1,7 +1,8 @@
 <?php
 include_once 'libs/core/Database.class.php';
 
-$id = $_POST['id'];
+$data = json_decode(file_get_contents("php://input"), true);
+$id = $data['id'];
 
 $conn = Database::getConnection();
 $sql = "DELETE FROM student WHERE id=?";
