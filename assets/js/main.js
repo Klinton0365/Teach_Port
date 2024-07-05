@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchStudents() {
-    fetch('../controllers/studentController.php?action=fetch')
+    fetch('fetch_students.php')
         .then(response => response.json())
         .then(data => {
             const tbody = document.querySelector('#studentsTable tbody');
@@ -39,7 +39,7 @@ function closeAddStudentModal() {
 
 function addStudent() {
     const formData = new FormData(document.getElementById('addStudentForm'));
-    fetch('../controllers/studentController.php?action=add', {
+    fetch('add_student.php', {
         method: 'POST',
         body: formData
     })
@@ -62,7 +62,7 @@ function deleteStudent(id) {
     if (confirm('Are you sure you want to delete this student?')) {
         const formData = new FormData();
         formData.append('id', id);
-        fetch('../controllers/studentController.php?action=delete', {
+        fetch('delete_student.php', {
             method: 'POST',
             body: formData
         })

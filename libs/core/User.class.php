@@ -56,7 +56,7 @@ class User
   }
 
   //private static $salt = "dsfhsefjpjdsfosd";
-  public static function signup($user, $college, $email, $pass)
+  public static function signup($user, $email, $pass)
   {
     //Session::set('email', $email);
     $_SESSION['email'] = $email;
@@ -66,8 +66,8 @@ class User
     ];
     $pass = password_hash($pass, PASSWORD_BCRYPT, $option);
     $conn = Database::getConnection();
-    $sql = "INSERT INTO `user` (`name`, `college`, `email`, `password`)
-    VALUES ('$user', '$college', '$email', '$pass');";
+    $sql = "INSERT INTO `user` (`name`, `email`, `password`)
+    VALUES ('$user', '$email', '$pass');";
     // $error = false;
     $result = $conn->query($sql);
     if ($result) {

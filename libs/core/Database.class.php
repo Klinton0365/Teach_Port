@@ -17,14 +17,14 @@ class Database
                 $server = "mysql.selfmade.ninja";
                 $username = "Klinton_03";
                 $password = "432305";
-                $dbname = "Klinton_03_onlinequize_0";
+                $dbname = "Klinton_03_teach_port";
               
             } else {
                 // Live server configuration
                 $server = "mysql.selfmade.ninja";
                 $username = "Klinton_03";
                 $password = "Klinton@432305";
-                $dbname = "Klinton_03_onlinequize_0";
+                $dbname = "Klinton_03_teach_port";
 
             }
             // Create connection
