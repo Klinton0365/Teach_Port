@@ -8,6 +8,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 $notification = '';
+$error = '';
 
 if (isset($_GET['logout'])) {
     if (Session::isset("session_token")) {
@@ -20,19 +21,15 @@ if (isset($_GET['logout'])) {
             echo "<h3> Previous Session not removing from db</h3>";
         }
         Session::destroy();
-        Session::unset_all(); ?>
-        <script>
-            window.location.href = "index.php";
-        </script>
-    <?php die();
+        Session::unset_all();
+        echo '<script>window.location.href = "home.php";</script>';
+        die();
     }
 }
 
-if (!isset($_COOKIE['fingerprint'])) { ?>
-    <script>
-        window.location.href = "index.php";
-    </script>
-    <?php }
+if (!isset($_COOKIE['fingerprint'])) {
+    echo '<script>window.location.href = "index.php";</script>';
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -51,11 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 //     header("Location: home.php");
                 //     exit();
                 //} else
-                if ($result) { ?>
-                    <script>
-                        window.location.href = "home.php";
-                    </script>
-                <?php // header("Location: home.php");
+                if ($result) {
+                    echo '<script>window.location.href = "home.php";</script>';
                 } else {
                     $notification = 'Invalid Credentials!';
                 }
@@ -69,15 +63,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             try {
                 User::signup($user, $email, $pass);
-                $signup = true; ?>
-                <script>
-                    window.location.href = "login.php";
-                </script>
-<?php exit();
+                $signup = true;
+                echo '<script>window.location.href = "home.php";</script>';
+                exit();
             } catch (mysqli_sql_exception $e) {
                 $error = $e->getMessage();
                 $signup = false;
-                echo '<p style="color:red;">Error: ' . $error . '</p>';
+                //echo '<p style="color:red;">Error: ' . $error . '</p>';
+                // Custom error message for duplicate entry
+                if (strpos($error, "Duplicate entry") !== false && strpos($error, "for key 'user.email'") !== false) {
+                    $error = "Email already Exist.";
+                }
             }
         }
     }
@@ -104,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
-                <p style="color:red;">Error: <?php echo htmlspecialchars($error); ?></p>
+                <?php echo '<p style="color:red;">' . $error . '</p>'; ?>
                 <!-- <span>or use your email for registration</span> -->
                 <input type="text" name="username" placeholder="Name" required />
                 <input type="email" name="email" placeholder="Email" required />

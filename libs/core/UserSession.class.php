@@ -112,7 +112,7 @@ class UserSession
             $login_time = DateTime::createFromFormat('Y-m-d H:i:s', $this->data['login_time']);
             $current_time = new DateTime();
             $time_diff = $current_time->getTimestamp() - $login_time->getTimestamp();
-            return $time_diff <= 3600; // Session valid for 1 hour
+            return $time_diff <= 60; // Session valid for 1 hour
         } else {
             throw new Exception("Login time is null");
         }
