@@ -2,7 +2,9 @@
 
 if (!isset($_SESSION['user_email'])) {
     header('Location: login.php');
-} ?>
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -88,7 +90,7 @@ if (!isset($_SESSION['user_email'])) {
         <tbody>
             <?php
             $conn = Database::getConnection();
-            $sql = "SELECT * FROM student";
+            $sql = "SELECT * FROM student ORDER BY marks ASC";
             $result = $conn->query($sql);
 
             while ($row = $result->fetch_assoc()) {
@@ -159,6 +161,13 @@ if (!isset($_SESSION['user_email'])) {
             </div>
         </div>
     </div>
+
+    <?php $count = '';
+    ?>
+    <button type="submit" class="btn btn-success" style="float: right;">
+        <span>Add</span>
+    </button>
+
 
     <script src="assets/js/main.js"></script>
     <script>

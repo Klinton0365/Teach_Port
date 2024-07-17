@@ -1,5 +1,5 @@
 <?php
-include_once 'libs/load.php';
+include 'libs/load.php';
 
 $name = $_POST['name'];
 $subject = $_POST['subject'];
@@ -7,7 +7,7 @@ $marks = $_POST['marks'];
 
 $conn = Database::getConnection();
 
-$sql = "SELECT * FROM student WHERE name=? AND subject=?";
+$sql = "SELECT * FROM student WHERE name=? AND subject=?"; // SUM(marks) GROUP BY name, subject ";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ss", $name, $subject);
 $stmt->execute();
@@ -28,4 +28,3 @@ if ($stmt->execute()) {
 } else {
     echo json_encode(['status' => 'error', 'message' => $stmt->error]);
 }
-?>
