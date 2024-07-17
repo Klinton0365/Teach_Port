@@ -162,11 +162,11 @@ if (!isset($_SESSION['user_email'])) {
         </div>
     </div>
 
-    <?php $count = '';
+    <?php //$count = '';
     ?>
-    <button type="submit" class="btn btn-success" style="float: right;">
+    <!-- <button type="submit" class="btn btn-success" style="float: right;">
         <span>Add</span>
-    </button>
+    </button> -->
 
 
     <script src="assets/js/main.js"></script>
